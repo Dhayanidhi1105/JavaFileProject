@@ -101,6 +101,7 @@ public class Main {
             }
             sc.close();
             System.out.println("\nNo of times each word appears in the file:");
+            //wordcnt.keySet() - gets all unique words stored
             for(String key:wordcnt.keySet())
             {
                 System.out.println(key+":"+wordcnt.get(key)+" time appear");
