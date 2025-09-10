@@ -30,8 +30,7 @@ public class Main {
             }else { // if file is already exist then else block execute
                 System.out.println("File already exist");
             }
-            // Print the current working directory
-            System.out.println("Current working directory: " + System.getProperty("user.dir"));
+            
         } catch (IOException e) {
             System.out.println("error in creation");
         }
