@@ -47,7 +47,7 @@ public class Main {
 
             while (sc.hasNextLine()) {
                 String str = sc.nextLine();
-                String[] words = str.split("\\s+");
+                String[] words = str.split("[^a-zA-Z0-9]+");
                 for (String word : words) {
                     if (!word.isEmpty()) {
                         totalWords++;
