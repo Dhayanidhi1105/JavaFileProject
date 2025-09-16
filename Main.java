@@ -1,80 +1,97 @@
 package org.example;
-import java.io.*;
 import java.util.*;
+import java.io.*;
 
 public class Main {
-    public static void main(String[] args) {
-        List<FileResult> list = new ArrayList<>();
-        try {
-            File file = new File("C:\\Users\\dhaya\\Filelist\\File.txt");
-            Scanner sc = new Scanner(file);
-            while (sc.hasNextLine()) {
-                String filepath = sc.nextLine().trim();
-                if (!filepath.isEmpty()) {
-                    //Call method to calculate word count
-                    FileResult result = calculateCount(filepath);
-                    //Add the result to the list
-                    list.add(result);
-                }
+
+    public static void main(String[] args) throws Exception {
+        long start = System.currentTimeMillis();
+
+        File file = new File("C:\\Users\\dhaya\\Filelist\\File.txt");
+        Scanner sc = new Scanner(file);
+
+        List<FileBox> list = new ArrayList<>(); // To store FileBox objects
+        List<Calculate> obj = new ArrayList<>(); // To store Calculate objects
+
+        while (sc.hasNextLine()) {
+            String filepath = sc.nextLine().trim();
+            if (!filepath.isEmpty()) {
+                Calculate object = new Calculate(filepath);//Create object for each thread
+                object.start();//Thread start
+                obj.add(object);
             }
-            sc.close();
-        } catch (FileNotFoundException e) {
-            System.out.print("Error");
         }
-         // Print execution time and total words for each file
-        for (FileResult obj : list ) {
-            System.out.println("Execution time:" + obj.executionTime + "ms");
-            System.out.println("Total words:" + obj.totalWords);
-            System.out.println("\n");
+        sc.close();
+
+        for (Calculate result : obj) {
+            result.join(); // wait until thread finishes
+            list.add(result.getObj()); // get result from thread
         }
-        System.out.println("\nWord count details:");
-        for(FileResult obj : list ) { 
-            for (String str : obj.wordCount.keySet() ) {
-                System.out.println(str + " : " + obj.wordCount.get(str));
-            }
-            System.out.println("-------------------------");
+
+        long end = System.currentTimeMillis();
+        System.out.println("Total execution time:" + (end - start) + "ms\n");
+
+        for (FileBox  result: list) {
+            System.out.println("Execution time:" +result.executiontime + "ms");
+            System.out.println("Total words:" + result.totalwords + "\n");
+        }
+
+        for (FileBox wordcount : list) {
+            System.out.println("Word Count Details:");
+            System.out.println(wordcount.wordcount);
+            System.out.println("-----------------------------------------------\n");
         }
     }
-    // Method to count words in a file
-    private static FileResult calculateCount(String filepath) {
-        int totalWords = 0;
-        long startTime = System.currentTimeMillis();//starting time
-        Map<String, Integer> wordCount = new HashMap<>();
+}
 
-        try {
-            File file = new File(filepath);
-            Scanner sc = new Scanner(file);
+class Calculate extends Thread {
+    FileBox obj;
+    String filepath;
 
+    public Calculate(String filepath) {
+        this.filepath = filepath;
+    }
+
+    //Thread
+    public void run() {
+        Map<String, Integer> wordcount = new HashMap<>();
+        int totalwords = 0;
+        long starttime = System.currentTimeMillis();
+
+        try (Scanner sc = new Scanner(new File(filepath))) {
             while (sc.hasNextLine()) {
-                String str = sc.nextLine();
-                String[] words = str.split("[^a-zA-Z0-9]+");
+                String fileline = sc.nextLine();
+                String[] words = fileline.split("[^A-Za-z0-9]+");
                 for (String word : words) {
                     if (!word.isEmpty()) {
-                        totalWords++;
-                        wordCount.put(word, wordCount.getOrDefault(word, 0) + 1);
+                        totalwords++;
+                        wordcount.put(word, wordcount.getOrDefault(word, 0) + 1);
                     }
                 }
             }
-            sc.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("Error: file not found ");
+        } catch (Exception e) {
+            System.out.println("error reading file: " + filepath);
         }
 
-        long endTime = System.currentTimeMillis();//ending time
-        long executionTime = endTime - startTime;//executiontime
+        long endtime = System.currentTimeMillis();
+        long executiontime = endtime - starttime;
 
-        return new FileResult(totalWords, executionTime, wordCount); //return the fileresult object to caller
+        obj = new FileBox((int) executiontime, totalwords, wordcount);
     }
-    
-    //Userdefined class
-    static class FileResult { 
-        int totalWords;
-        long executionTime;
-        Map<String, Integer> wordCount;
-        FileResult(int totalWords, long executionTime, Map<String, Integer> wordCount) {
-            this.totalWords = totalWords;
-            this.executionTime = executionTime;
-            this.wordCount = wordCount;
-        }
+
+    public FileBox getObj() {
+        return obj; // return the FileBox object that stores the result
     }
-} 
+}
+
+class FileBox {
+    int executiontime;
+    int totalwords;
+    Map<String, Integer> wordcount;
+
+    public FileBox(int executiontime, int totalwords, Map<String, Integer> wordcount) {
+        this.executiontime = executiontime;
+        this.totalwords = totalwords;
+        this.wordcount = wordcount;
+    }
+}
