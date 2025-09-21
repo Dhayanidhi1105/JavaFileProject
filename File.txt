@@ -1,7 +1,6 @@
-C:\Users\dhaya\OneDrive\Desktop\Filelist\ex.txt
-C:\Users\dhaya\Downloads\Atomic habits ( PDFDrive ).txt
-C:\Users\dhaya\Downloads\_It_Ends_with_Us_-_Colleen_Hoover.txt
-C:\Users\dhaya\Downloads\Rich_Dad_Poor_Dad_-_Robert_T_Kiyosaki.txt
-C:\Users\dhaya\Downloads\The_psychology_of_money_-_Morgan_housel.txt
-C:\Users\dhaya\Downloads\_how_to_make_money_in_intraday_trading_-_ashwani_gujral.txt
-C:\Users\dhaya\Downloads\Harry_Potter_-_Jk_Rowlings.txt
+Atomic habits ( PDFDrive ).txt
+It_Ends_with_Us_-_Colleen_Hoover.txt
+Rich_Dad_Poor_Dad_-_Robert_T_Kiyosaki.txt
+The_psychology_of_money_-_Morgan_housel.txt
+How_to_make_money_in_intraday_trading_-_ashwani_gujral.txt
+Harry_Potter_-_Jk_Rowlings.txt
