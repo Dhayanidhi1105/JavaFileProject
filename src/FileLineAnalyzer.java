@@ -37,7 +37,7 @@ public class FileLineAnalyzer {
                                 " ---> Contain [ " + t.getLineCount() + " Lines ]" +"and [ Total Execution time :"+ t.getExecutionTime() + " ms]"
                 );
 
-                System.out.println("Paragraph Count--> [ "+t.getParagraphcount()+" ]\nd");
+                System.out.println("Paragraph Count--> [ "+t.getParagraphcount()+" ]\n");
             }
         } catch (FileNotFoundException e) {
             System.out.println("File not found: " + filepath);
